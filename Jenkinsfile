@@ -20,7 +20,7 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(
-            credentialsId: 'dockeer-crd',
+            credentialsId: 'dockercrd',
             usernameVariable: 'DOCKERHUB_USERNAME',
             passwordVariable: 'DOCKERHUB_TOKEN'
           )
@@ -55,7 +55,7 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(
-            credentialsId: 'dockeer-crd',
+            credentialsId: 'dockercrd',
             usernameVariable: 'DOCKERHUB_USERNAME',
             passwordVariable: 'DOCKERHUB_TOKEN'
           )
