@@ -1,0 +1,46 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: fitconnect-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: fitconnect_ai
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: fitconnect
+      MYSQL_PASSWORD: fitconnect
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./fitconnect-backend
+      dockerfile: Dockerfile
+    container_name: fitconnect-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fitconnect_ai?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: fitconnect
+      SPRING_DATASOURCE_PASSWORD: fitconnect
+      APP_CORS_ALLOWED_ORIGINS: http://localhost:4200,http://localhost:8081,http://127.0.0.1:4200,http://127.0.0.1:8081
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+
+  frontend:
+    build:
+      context: ./fitconnect-frontend
+      dockerfile: Dockerfile
+    container_name: fitconnect-frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend

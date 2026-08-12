@@ -1,0 +1,8 @@
+node_modules
+dist
+.angular
+.git
+.codex-backend-inspect
+npm-debug.log
+Dockerfile
+docker-compose.yml
