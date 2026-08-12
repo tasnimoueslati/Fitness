@@ -29,6 +29,9 @@ jobs:
           docker push   ${{ vars.DOCKERHUB_USERNAME }}/fitconnect-backend
 
       - name: lancement du docker compose
+        env:
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+      
         run: |
           docker compose up -d
           docker compose ps -a
