@@ -25,7 +25,7 @@ jobs:
       - name: build back-end
         run: |
           docker build -t  ${{ vars.DOCKERHUB_USERNAME }}/fitconnect-backend fitconnect-backtend
-          docker push   ${{ vars.DOCKERHUB_USERNAME }}/spring-app
+          docker push   ${{ vars.DOCKERHUB_USERNAME }}/fitconnect-backtend
 
       - name: lancement du docker compose
         run: |
