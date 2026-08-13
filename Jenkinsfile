@@ -1,6 +1,16 @@
 pipeline {
   agent any
 
+  options {
+    skipDefaultCheckout(true)
+  }
+
+  environment {
+    DOCKERHUB_USERNAME = 'tasnim255'
+    FRONTEND_IMAGE = "${DOCKERHUB_USERNAME}/fitconnect-frontend"
+    BACKEND_IMAGE = "${DOCKERHUB_USERNAME}/fitconnect-backend"
+  }
+
   stages {
     stage("Clean up") {
       steps {
@@ -16,17 +26,17 @@ pipeline {
       }
     }
 
-    stage("Docker Hub") {
+    stage("Docker Hub Login") {
       steps {
         withCredentials([
           usernamePassword(
-            credentialsId: 'dockercrd',
-            usernameVariable: 'DOCKERHUB_USERNAME',
-            passwordVariable: 'DOCKERHUB_TOKEN'
+            credentialsId: 'dockeer-crd',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_TOKEN'
           )
         ]) {
-          bat '''
-            echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USERNAME% --password-stdin
+          sh '''
+            echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
           '''
         }
       }
@@ -35,9 +45,9 @@ pipeline {
     stage("Générer backend image") {
       steps {
         dir("fitconnect-backend") {
-          bat "mvn clean package -DskipTests"
-          bat "docker build -t %DOCKERHUB_USERNAME%/fitconnect-backend:latest . --no-cache"
-          bat "docker push %DOCKERHUB_USERNAME%/fitconnect-backend:latest"
+          sh "mvn clean package -DskipTests"
+          sh "docker build -t $BACKEND_IMAGE:latest . --no-cache"
+          sh "docker push $BACKEND_IMAGE:latest"
         }
       }
     }
@@ -45,33 +55,28 @@ pipeline {
     stage("Générer frontend image") {
       steps {
         dir("fitconnect-frontend") {
-          bat "docker build -t %DOCKERHUB_USERNAME%/fitconnect-frontend:latest . --no-cache"
-          bat "docker push %DOCKERHUB_USERNAME%/fitconnect-frontend:latest"
+          sh "docker build -t $FRONTEND_IMAGE:latest . --no-cache"
+          sh "docker push $FRONTEND_IMAGE:latest"
         }
       }
     }
 
     stage("Lancement du docker compose") {
       steps {
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'dockercrd',
-            usernameVariable: 'DOCKERHUB_USERNAME',
-            passwordVariable: 'DOCKERHUB_TOKEN'
-          )
-        ]) {
-          bat "docker compose down"
-          bat "docker compose pull"
-          bat "docker compose up -d"
-          bat "docker compose ps"
-        }
+        sh '''
+          export DOCKERHUB_USERNAME=tasnim255
+          docker compose down || true
+          docker compose pull
+          docker compose up -d
+          docker compose ps
+        '''
       }
     }
   }
 
   post {
     always {
-      bat "docker logout"
+      sh "docker logout || true"
     }
   }
 }
