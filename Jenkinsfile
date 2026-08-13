@@ -30,7 +30,7 @@ pipeline {
       steps {
         withCredentials([
           usernamePassword(
-            credentialsId: 'dockeer-crd',
+            credentialsId: 'dockercrd',
             usernameVariable: 'DOCKER_USER',
             passwordVariable: 'DOCKER_TOKEN'
           )
