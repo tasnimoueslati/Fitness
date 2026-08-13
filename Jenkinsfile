@@ -42,15 +42,14 @@ pipeline {
       }
     }
 
-    stage("Générer backend image") {
-      steps {
-        dir("fitconnect-backend") {
-          sh "mvn clean package -DskipTests"
-          sh "docker build -t $BACKEND_IMAGE:latest . --no-cache"
-          sh "docker push $BACKEND_IMAGE:latest"
-        }
-      }
+  stage("Générer backend image") {
+  steps {
+    dir("fitconnect-backend") {
+      sh "docker build -t $BACKEND_IMAGE:latest . --no-cache"
+      sh "docker push $BACKEND_IMAGE:latest"
     }
+  }
+}
 
     stage("Générer frontend image") {
       steps {
