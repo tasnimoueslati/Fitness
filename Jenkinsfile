@@ -45,7 +45,7 @@ pipeline {
   stage("Générer backend image") {
   steps {
     dir("fitconnect-backend") {
-      sh "docker build -t $BACKEND_IMAGE:latest . --no-cache"
+      sh "docker build -t $BACKEND_IMAGE:latest ."
       sh "docker push $BACKEND_IMAGE:latest"
     }
   }
@@ -54,7 +54,7 @@ pipeline {
     stage("Générer frontend image") {
       steps {
         dir("fitconnect-frontend") {
-          sh "docker build -t $FRONTEND_IMAGE:latest . --no-cache"
+          sh "docker build -t $FRONTEND_IMAGE:latest ."
           sh "docker push $FRONTEND_IMAGE:latest"
         }
       }
