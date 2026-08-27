@@ -80,22 +80,7 @@ pipeline {
     }
   }
 }
-    stage("Deploy avec k8s") {
-  steps {
-    withKubeConfig([
-      credentialsId: 'kubeconfigcred',
-      serverUrl: 'https://192.168.65.136:6443'
-    ]) {
-      sh "kubectl get nodes"
-      sh "kubectl apply -f k8s/"
-      sh "kubectl rollout restart deployment/backend"
-      sh "kubectl rollout restart deployment/frontend"
-      sh "kubectl get pods"
-      sh "kubectl get svc"
-    }
-  }
-}
-  }
+  
 
   post {
     always {
