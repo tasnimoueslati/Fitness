@@ -42,14 +42,36 @@ pipeline {
       }
     }
 
-  stage("Générer backend image") {
-  steps {
-    dir("fitconnect-backend") {
-      sh "docker build -t $BACKEND_IMAGE:latest ."
-      sh "docker push $BACKEND_IMAGE:latest"
+    stage("Test Quality of code with SonarQube") {
+      steps {
+        dir("fitconnect-backend") {
+          withCredentials([
+            string(
+              credentialsId: "sonar_creds",
+              variable: "SONAR_TOKEN"
+            )
+          ]) {
+            sh '''
+              mvn clean verify sonar:sonar \
+                -Dsonar.projectKey=devops \
+                -Dsonar.projectName=devops \
+                -Dsonar.host.url=http://192.168.65.136:9000 \
+                -Dsonar.login=$SONAR_TOKEN \
+                -DskipTests
+            '''
+          }
+        }
+      }
     }
-  }
-}
+
+    stage("Générer backend image") {
+      steps {
+        dir("fitconnect-backend") {
+          sh "docker build -t $BACKEND_IMAGE:latest ."
+          sh "docker push $BACKEND_IMAGE:latest"
+        }
+      }
+    }
 
     stage("Générer frontend image") {
       steps {
@@ -59,28 +81,7 @@ pipeline {
         }
       }
     }
-    stage("Test Quality of code with SonarQube") {
-  steps {
-    dir("fitconnect-backend") {
-      withCredentials([
-        string(
-          credentialsId: "sonar_creds",
-          variable: "SONAR_TOKEN"
-        )
-      ]) {
-        sh '''
-          mvn clean verify sonar:sonar \
-            -Dsonar.projectKey=devops \
-            -Dsonar.projectName=devops \
-            -Dsonar.host.url=http://192.168.65.136:9000 \
-            -Dsonar.login=$SONAR_TOKEN \
-            -DskipTests
-        '''
-      }
-    }
   }
-}
-  
 
   post {
     always {
