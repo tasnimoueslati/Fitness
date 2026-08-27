@@ -71,16 +71,15 @@ pipeline {
         sh '''
           mvn clean verify sonar:sonar \
             -Dsonar.projectKey=devops \
-           
+            -Dsonar.projectName=devops \
             -Dsonar.host.url=http://192.168.65.136:9000 \
-            -Dsonar.login=sqp_54c607eadb6cb293b6d19a395494a25fefcef271 \
+            -Dsonar.login=$SONAR_TOKEN \
             -DskipTests
         '''
       }
     }
   }
 }
-
     stage("Deploy avec k8s") {
   steps {
     withKubeConfig([
