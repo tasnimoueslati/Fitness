@@ -59,6 +59,27 @@ pipeline {
         }
       }
     }
+    stage("Test Quality of code with SonarQube") {
+  steps {
+    dir("fitconnect-backend") {
+      withCredentials([
+        string(
+          credentialsId: "sonar_creds",
+          variable: "SONAR_TOKEN"
+        )
+      ]) {
+        sh '''
+          mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=devops \
+           
+            -Dsonar.host.url=http://192.168.65.136:9000 \
+            -Dsonar.login=sqp_54c607eadb6cb293b6d19a395494a25fefcef271 \
+            -DskipTests
+        '''
+      }
+    }
+  }
+}
 
     stage("Deploy avec k8s") {
   steps {
