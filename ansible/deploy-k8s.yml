@@ -1,0 +1,66 @@
+---
+- name: Deploy FitConnect on Kubernetes
+  hosts: master
+  become: yes
+
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+
+  vars:
+    project_dir: /home/tasnimoueslati/devops1/Fitness
+
+  tasks:
+    - name: Deploy mysql persistent volume
+      command: kubectl apply -f {{ project_dir }}/k8s/mysql-pv.yml
+
+    - name: Deploy backend uploads persistent volume
+      command: kubectl apply -f {{ project_dir }}/k8s/backend-pv.yml
+
+    - name: Deploy mysql secret
+      command: kubectl apply -f {{ project_dir }}/k8s/mysql-secret.yml
+
+    - name: Deploy mysql persistent volume claim
+      command: kubectl apply -f {{ project_dir }}/k8s/mysql-pvc.yml
+
+    - name: Deploy backend uploads persistent volume claim
+      command: kubectl apply -f {{ project_dir }}/k8s/backend-pvc.yml
+
+    - name: Deploy mysql
+      command: kubectl apply -f {{ project_dir }}/k8s/mysql-deployment.yml
+
+    - name: Deploy mysql service
+      command: kubectl apply -f {{ project_dir }}/k8s/mysql-service.yml
+
+    - name: Deploy backend
+      command: kubectl apply -f {{ project_dir }}/k8s/backend-deployment.yml
+
+    - name: Deploy backend service
+      command: kubectl apply -f {{ project_dir }}/k8s/backend-service.yml
+
+    - name: Deploy frontend
+      command: kubectl apply -f {{ project_dir }}/k8s/frontend-deployment.yml
+
+    - name: Deploy frontend service
+      command: kubectl apply -f {{ project_dir }}/k8s/frontend-service.yml
+
+    - name: Restart backend deployment
+      command: kubectl rollout restart deployment/backend
+
+    - name: Restart frontend deployment
+      command: kubectl rollout restart deployment/frontend
+
+    - name: Check pods
+      command: kubectl get pods
+      register: pods_result
+
+    - name: Show pods
+      debug:
+        var: pods_result.stdout_lines
+
+    - name: Check services
+      command: kubectl get svc
+      register: services_result
+
+    - name: Show services
+      debug:
+        var: services_result.stdout_lines

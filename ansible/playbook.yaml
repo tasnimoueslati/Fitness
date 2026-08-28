@@ -1,0 +1,32 @@
+---
+- hosts: master
+  become: yes
+
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+
+  tasks:
+
+  - name: Deploy mysql 
+    command: kubectl apply -f /home/ubuntu/formation_level_one/k8s/mysql-deploy.yaml
+
+  - name: Deploy mysql service
+    command: kubectl apply -f /home/ubuntu/formation_level_one/k8s/mysql-service.yaml
+
+  - name: Deploy angular
+    command: kubectl apply -f /home/ubuntu/formation_level_one/k8s/deploy-angular.yaml
+
+  - name: Deploy angular svc 
+    command: kubectl apply -f /home/ubuntu/formation_level_one/k8s/angular-svc.yaml
+
+  - name: Deploy spring
+    command: kubectl apply -f /home/ubuntu/formation_level_one/k8s/deploy-spring.yaml
+
+  - name: Deploy spring svc 
+    command: kubectl apply -f /home/ubuntu/formation_level_one/k8s/service-backend.yaml
+
+  - name: Deploy volume 
+    command: kubectl apply -f /home/ubuntu/formation_level_one/k8s/pvc.yaml
+
+
+

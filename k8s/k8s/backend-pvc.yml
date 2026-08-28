@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pvc
+  name: backend-uploads-pvc
 spec:
   storageClassName: manual
-  volumeName: mysql-pv
+  volumeName: backend-uploads-pv
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi
-
+      storage: 1Gi

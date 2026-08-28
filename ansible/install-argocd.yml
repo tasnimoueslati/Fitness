@@ -1,0 +1,26 @@
+---
+- name: Install ArgoCD on Kubernetes
+  hosts: master
+  become: yes
+
+  environment:
+    KUBECONFIG: /home/tasnimoueslati/.kube/config
+
+  tasks:
+    - name: Create argocd namespace
+      command: kubectl create namespace argocd
+      register: argocd_namespace
+      failed_when:
+        - argocd_namespace.rc != 0
+        - "'AlreadyExists' not in argocd_namespace.stderr"
+
+    - name: Install ArgoCD
+      command: kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+    - name: Check ArgoCD pods
+      command: kubectl get pods -n argocd
+      register: argocd_pods
+
+    - name: Show ArgoCD pods
+      debug:
+        var: argocd_pods.stdout_lines
