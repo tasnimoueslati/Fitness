@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: fitconnect-backend-alerts
+  labels:
+    release: my-kube-prometheus-stack
+spec:
+  groups:
+    - name: fitconnect-backend.rules
+      rules:
+        - alert: SpringAppDown
+          expr: up{namespace="default", service="backend"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Application Down"
+            description: "L'application Spring Boot est indisponible"
