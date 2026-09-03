@@ -21,10 +21,7 @@
         <java.version>17</java.version>
         <jjwt.version>0.12.6</jjwt.version>
 		 <tomcat.version>10.1.58</tomcat.version>
-    <netty.version>4.1.137.Final</netty.version>
-    <jackson-bom.version>2.21.5</jackson-bom.version>
-    <commons-lang3.version>3.18.0</commons-lang3.version>
-    <log4j2.version>2.25.5</log4j2.version>
+    
     </properties>
 
     <dependencies>
