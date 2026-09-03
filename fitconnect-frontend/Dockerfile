@@ -9,7 +9,7 @@ COPY . .
 RUN npm run build
 
 FROM nginx:alpine
-RUN apk update && apk upgrade
+RUN apk upgrade --no-cache
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/fitconnect-frontend/browser /usr/share/nginx/html
