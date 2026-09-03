@@ -10,9 +10,11 @@ RUN mvn -q -DskipTests package
 
 FROM eclipse-temurin:17-jre-alpine
 
-RUN apk upgrade --no-cache && \
-    addgroup -S fitconnect && \
-    adduser -S fitconnect -G fitconnect
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    groupadd -r fitconnect && \
+    useradd -r -g fitconnect fitconnect && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
