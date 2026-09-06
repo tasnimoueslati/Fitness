@@ -9,17 +9,13 @@ pipeline {
     DOCKERHUB_USERNAME = 'tasnim255'
     FRONTEND_IMAGE = "${DOCKERHUB_USERNAME}/fitconnect-frontend"
     BACKEND_IMAGE = "${DOCKERHUB_USERNAME}/fitconnect-backend"
+    DOCKER_BUILDKIT = "1"
   }
 
   stages {
-    stage("Clean up") {
-      steps {
-        deleteDir()
-      }
-    }
-
     stage("Checkout") {
       steps {
+        // pas de deleteDir() : Jenkins ne re-télécharge que ce qui a changé
         git branch: 'main',
             credentialsId: 'githubcrd',
             url: 'https://github.com/tasnimoueslati/Fitness.git'
@@ -35,9 +31,7 @@ pipeline {
             passwordVariable: 'DOCKER_TOKEN'
           )
         ]) {
-          sh '''
-            echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
-          '''
+          sh 'echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin'
         }
       }
     }
@@ -46,10 +40,7 @@ pipeline {
       steps {
         dir("fitconnect-backend") {
           withCredentials([
-            string(
-              credentialsId: "sonar_creds",
-              variable: "SONAR_TOKEN"
-            )
+            string(credentialsId: "sonar_creds", variable: "SONAR_TOKEN")
           ]) {
             sh '''
               mvn clean verify sonar:sonar \
@@ -57,6 +48,7 @@ pipeline {
                 -Dsonar.projectName=devops \
                 -Dsonar.host.url=http://192.168.65.136:9000 \
                 -Dsonar.login=$SONAR_TOKEN \
+                -Dsonar.qualitygate.wait=false \
                 -DskipTests
             '''
           }
@@ -64,20 +56,23 @@ pipeline {
       }
     }
 
-    stage("Générer backend image") {
-      steps {
-        dir("fitconnect-backend") {
-          sh "docker build -t $BACKEND_IMAGE:latest ."
-          sh "docker push $BACKEND_IMAGE:latest"
+    stage("Build & push images") {
+      parallel {
+        stage("Backend") {
+          steps {
+            dir("fitconnect-backend") {
+              sh "docker build -t $BACKEND_IMAGE:latest ."
+              sh "docker push $BACKEND_IMAGE:latest"
+            }
+          }
         }
-      }
-    }
-
-    stage("Générer frontend image") {
-      steps {
-        dir("fitconnect-frontend") {
-          sh "docker build -t $FRONTEND_IMAGE:latest ."
-          sh "docker push $FRONTEND_IMAGE:latest"
+        stage("Frontend") {
+          steps {
+            dir("fitconnect-frontend") {
+              sh "docker build -t $FRONTEND_IMAGE:latest ."
+              sh "docker push $FRONTEND_IMAGE:latest"
+            }
+          }
         }
       }
     }
