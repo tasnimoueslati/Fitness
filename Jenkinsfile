@@ -76,6 +76,19 @@ pipeline {
         }
       }
     }
+    stage("Deploy to Kubernetes") {
+  steps {
+    withKubeConfig([
+      credentialsId: 'kubeconfigcred',
+      serverUrl: 'https://192.168.65.136:6443'
+    ]) {
+      sh "kubectl rollout restart deployment backend"
+      sh "kubectl rollout restart deployment frontend"
+      sh "kubectl rollout status deployment backend --timeout=180s"
+      sh "kubectl rollout status deployment frontend --timeout=180s"
+    }
+  }
+}
   }
 
   post {
