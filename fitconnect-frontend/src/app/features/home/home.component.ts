@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
         <div class="hero-spacer"></div>
         <div class="hero-content">
           <p class="kicker">Plateforme intelligente de salle de sport</p>
-          <h1><span>FitConnect</span> AI</h1>
+          <h1><span>FitConnect</span></h1>
           <p class="lead">
             Réservations, coaching, nutrition, suivi de progression et marketplace sportive
             dans une seule expérience premium.
