@@ -17,7 +17,7 @@ spec:
           image: tasnim255/fitconnect-backend:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8090
+            - containerPort: 8080
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:mysql://mysql:3306/fitconnect_ai?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
@@ -33,8 +33,7 @@ spec:
                   key: MYSQL_PASSWORD
             - name: APP_CORS_ALLOWED_ORIGINS
               value: http://localhost:30080,http://127.0.0.1:30080,http://192.168.65.136:30080
-            - name: APP_CORS_ALLOWED_ORIGINS
-              value: http://localhost:30080,http://127.0.0.1:30080
+            
             - name: GROQ_API_KEY
               value: ""
           volumeMounts:
