@@ -50,9 +50,9 @@ spec:
                 - -uroot
                 - -proot
             initialDelaySeconds: 20
-            periodSeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
       volumes:
         - name: mysql-data
           persistentVolumeClaim:
             claimName: mysql-pvc
-
