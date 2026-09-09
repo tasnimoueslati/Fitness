@@ -324,7 +324,7 @@ export class RoleSpaceComponent implements OnInit {
     if (this.currentRole === 'ADMIN') {
       return [
         { tag: 'Stats', title: 'Dashboard global', text: 'Suivre utilisateurs, coachs, commandes, chiffre d’affaires et réservations du jour.', link: '/admin/dashboard' },
-        { tag: 'Catalogue', title: 'Produits et stock', text: 'Contrôler les produits, catégories, promotions et ruptures de stock.', link: '/boutique' },
+        { tag: 'Catalogue', title: 'Produits et stock', text: 'Contrôler les produits, catégories, promotions et ruptures de stock.', link: '/admin/produits' },
         { tag: 'Flux', title: 'Commandes', text: 'Consulter les commandes, statuts, livraisons et historique client.', link: '/commandes' }
       ];
     }
@@ -353,7 +353,7 @@ export class RoleSpaceComponent implements OnInit {
     if (this.currentRole === 'ADMIN') {
       return [
         { badge: 'Utilisateurs', title: 'Gestion des rôles', text: 'Administrateur, client, coach et nutritionniste avec contrôle des accès.', link: '/admin/dashboard' },
-        { badge: 'Marketplace', title: 'Produits, catégories et promotions', text: 'Ajout, modification, suppression logique, stock et promotions.', link: '/boutique' },
+       { badge: 'Marketplace', title: 'Produits, catégories et promotions', text: 'Ajout, modification, suppression logique, stock et promotions.', link: '/admin/produits' },
         { badge: 'Réservations', title: 'Supervision des rendez-vous', text: 'Vue globale des séances, consultations, annulations et planning.', link: '/reservations' },
         { badge: 'Notifications', title: 'Alertes système', text: 'Commandes, rappels, promotions, messages et alertes de stock.', link: '/notifications' }
       ];

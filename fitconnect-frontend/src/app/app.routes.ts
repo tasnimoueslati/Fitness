@@ -97,6 +97,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent)
   },
   {
+    path: 'admin/produits',
+    canActivate: [authGuard, roleGuard(['ADMIN'])],
+    loadComponent: () => import('./features/admin/product-admin/product-admin.component').then(m => m.ProductAdminComponent)
+  },
+  {
     path: 'espace',
     canActivate: [authGuard],
     loadComponent: () => import('./features/role-space/role-space.component').then(m => m.RoleSpaceComponent)

@@ -1,0 +1,86 @@
+<section class="hero">
+  <div class="hero-shade"></div>
+  <div class="hero-inner">
+    <div class="hero-spacer"></div>
+    <div class="hero-content">
+      <p class="kicker">Plateforme intelligente de salle de sport</p>
+      <h1><span>FitConnect</span> AI</h1>
+      <p class="lead">
+        Réservations, coaching, nutrition, suivi de progression et marketplace sportive
+        dans une seule expérience premium.
+      </p>
+      <div class="actions">
+        <a routerLink="/auth/register" class="btn btn-primary">Commencer</a>
+        <a routerLink="/boutique" class="btn btn-light">Explorer la boutique</a>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <span class="panel-label">Objectif du jour</span>
+      <strong>Programme IA + séance coach</strong>
+      <div class="metric-row">
+        <span>Calories</span>
+        <b>2 250</b>
+      </div>
+      <div class="metric-row">
+        <span>Progression</span>
+        <b>78%</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section dark-band">
+  <div class="section-head">
+    <p class="kicker">Espaces dédiés</p>
+    <h2>Chaque rôle a son tableau de bord</h2>
+  </div>
+  <div class="role-grid">
+    @for (role of roles; track role.title) {
+      <a [routerLink]="role.link" class="role-card">
+        <span>{{ role.tag }}</span>
+        <h3>{{ role.title }}</h3>
+        <p>{{ role.text }}</p>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="section shop-preview">
+  <div>
+    <p class="kicker">Marketplace sportive</p>
+    <h2>Une boutique qui ressemble à un vrai site e-commerce</h2>
+    <p>
+      Filtres, promotions, stock, notes, panier et recommandations IA pour relier les achats
+      aux objectifs sportifs et nutritionnels.
+    </p>
+    <a routerLink="/boutique" class="btn btn-primary">Voir les produits</a>
+  </div>
+  <div class="product-strip">
+    @for (product of products; track product.name) {
+      <div class="mini-product">
+        <img [src]="product.image" [alt]="product.name">
+        <span>{{ product.badge }}</span>
+        <strong>{{ product.name }}</strong>
+        <b>{{ product.price }}</b>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="footer-like">
+  <div>
+    <h3>FitConnect AI</h3>
+    <p>Coaching, nutrition, IA et commerce sportif connectés.</p>
+  </div>
+  <div>
+    <h4>Contact</h4>
+    <p>contact&#64;fitconnect.ai</p>
+    <p>+216 55 000 000</p>
+  </div>
+  <div>
+    <h4>Services</h4>
+    <a routerLink="/coaches">Coachs</a>
+    <a routerLink="/nutritionnistes">Nutritionnistes</a>
+    <a routerLink="/ai/chat">Assistant IA Groq</a>
+  </div>
+</section>
