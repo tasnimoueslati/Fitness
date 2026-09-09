@@ -17,8 +17,7 @@ import { CartService } from '../../core/services/cart.service';
 
       <div class="links">
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
-        <a routerLink="/coaches" routerLinkActive="active">Coachs</a>
-        <a routerLink="/nutritionnistes" routerLinkActive="active">Nutritionnistes</a>
+        
         <a routerLink="/boutique" routerLinkActive="active">Boutique</a>
 
         @if (auth.isAuthenticated()) {
