@@ -18,9 +18,12 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          envFrom:
+           
+            - configMapRef:
+                name: backend-config
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://mysql:3306/fitconnect_ai?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+         
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -31,11 +34,12 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: MYSQL_PASSWORD
-            - name: APP_CORS_ALLOWED_ORIGINS
-              value: http://localhost:30080,http://127.0.0.1:30080,http://192.168.65.136:30080
-            
+          
             - name: GROQ_API_KEY
-              value: ""
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: GROQ_API_KEY
           volumeMounts:
             - name: backend-uploads
               mountPath: /app/uploads
@@ -43,4 +47,3 @@ spec:
         - name: backend-uploads
           persistentVolumeClaim:
             claimName: backend-uploads-pvc
-
