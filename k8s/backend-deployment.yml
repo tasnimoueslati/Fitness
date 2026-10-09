@@ -34,12 +34,6 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: MYSQL_PASSWORD
-          
-            - name: GROQ_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secret
-                  key: GROQ_API_KEY
           volumeMounts:
             - name: backend-uploads
               mountPath: /app/uploads
